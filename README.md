@@ -294,6 +294,22 @@ class PostController extends Controller
 }
 ```
 
+```bash
+php artisan make:policy PostPolicy --model=Post
+```
+
+```bash
+public function update(User $user, Post $post)
+{
+    return $user->id === $post->user_id;
+}
+
+public function delete(User $user, Post $post)
+{
+    return $user->id === $post->user_id;
+}
+```
+
 **Send Custom Email with Sanctum Token for Verification**
 
 ```bash
@@ -341,7 +357,7 @@ http://127.0.0.1:8000/api/auth/verify/email?token=1|GP2Wgaze6CLxjd1SDVLLijSg3Dc7
 This route is unauthenticated because it uses the token from the email:
 
 ```bash
-Route::get('verify/email', [AuthController::class, 'confirmEmail']);
+Route::get('/verify/email', [AuthController::class, 'confirmEmail']);
 ```
 
 In AuthController.php:
@@ -403,7 +419,7 @@ Route::middleware(['auth:sanctum', RoleMiddleware::class . ':admin'])->group(fun
 
 // Email verification routes protected by Sanctum
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post('email/verify', [AuthController::class, 'verifyEmail']);
+    Route::post('/email/verify', [AuthController::class, 'verifyEmail']);
 
     // Email verification route
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
